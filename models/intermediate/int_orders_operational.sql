@@ -8,8 +8,7 @@ select
   o.purchase_cost,
   o.margin,
   s.shipping_fee,
-  s.logcost,
-  s.ship_cost
+  s.logcost
 from {{ref("int_orders_margin")}} as o
 left join {{ref("stg_raw__ship")}} as s 
   using(orders_id)
