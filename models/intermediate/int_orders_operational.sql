@@ -1,7 +1,7 @@
 select 
   o.orders_id,
   o.date_date,
-  cast(s.ship_cost as int64),
+  cast(s.ship_cost as int64) as ship_cost,
   round(o.margin + s.shipping_fee - (s.logcost + cast(s.ship_cost as int64)),2) as operational_margin, 
   o.quantity,
   o.revenue,
