@@ -3,49 +3,49 @@ version: 2
 sources:
   - name: raw
     schema: gz_raw_data
-    description: dataset in big query 
+    description: dataset in big query
     tables:
       - name: product
         identifier: raw_gz_product
-        description: greenweez product table 
+        description: greenweez product table
         columns:
           - name: products_id
-            description: unique identifier of products 
-            tests: 
+            tests:
               - unique
               - not_null
-          - name: purchSE_PRICE 
-            description: renamed to purchase_price, price of products 
+            description: unique identifier of products
+          - name: purchSE_PRICE
+            description: renamed to purchase_price, price of products
       - name: sales
         identifier: raw_gz_sales
-        description: greenweez sales table 
+        description: greenweez sales table
         columns:
           - name: date_date
-            description: date of order 
+            description: date of order
           - name: orders_id
-            description: unique identifier of order 
-            tests:
-               - unique:
-                   column_name:  "(date_date ||  ‘-‘ || orders_id)"
-          - name: pdt_id 
-            description: renamed to products_id, id of product 
+            description: unique identifier of order
+          - name: pdt_id
+            description: renamed to products_id, id of product
           - name: revenue
-            description: earning from orders 
+            description: earning from orders
           - name: quantity
-            description: products ordered 
+            description: products ordered
+        tests:
+          - unique:
+              column_name: "(orders_id ||  '-' || pdt_id)"
       - name: ship
         identifier: raw_gz_ship
-        description: greenweez shipping table 
+        description: greenweez shipping table
         columns:
           - name: orders_id
-            description: orders_id for shipping
-            tests: 
+            tests:
               - unique
               - not_null
+            description: orders_id for shipping
           - name: shipping_fee
-            description: price for shipping 
+            description: price for shipping
           - name: shipping_fee_1
-            description: same as shipping_fee, deleted 
+            description: same as shipping_fee, deleted
           - name: logCost
-            description: logistics cost 
+            description: logistics cost
           - name: ship_cost
