@@ -1,12 +1,11 @@
-SELECT 
-    products_id, 
-    date_date, 
+select
+    products_id,
+    date_date,
     orders_id,
-    revenue, 
-    quantity, 
-    CAST(purchase_price AS FLOAT64), 
-    ROUND(s.quantity*CAST(p.purchase_price AS FLOAT64),2) as purchase_cost,
-    s.revenue - ROUND(s.quantity*CAST(p.purchase_price AS FLOAT64),2) as margin
-FROM {{ref("stg_raw__sales")}} as s
-LEFT JOIN {{ref("stg_raw__product")}} as p 
-    USING (products_id)
+    revenue,
+    quantity,
+    cast(purchase_price as float64) as purchase_price,
+    round(s.quantity * cast(p.purchase_price as float64), 2) as purchase_cost,
+    s.revenue - round(s.quantity * cast(p.purchase_price as float64), 2) as margin
+from {{ ref("stg_raw__sales") }} as s
+left join {{ ref("stg_raw__product") }} as p using (products_id)
