@@ -1,0 +1,86 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: gz_raw_data
+    description: dataset in big query
+    tables:
+      - name: product
+        identifier: raw_gz_product
+        description: greenweez product table
+        columns:
+          - name: products_id
+            tests:
+              - unique
+              - not_null
+            description: unique identifier of products
+          - name: purchSE_PRICE
+            description: renamed to purchase_price, price of products
+      - name: sales
+        identifier: raw_gz_sales
+        description: greenweez sales table
+        columns:
+          - name: date_date
+            description: date of order
+          - name: orders_id
+            description: unique identifier of order
+          - name: pdt_id
+            description: renamed to products_id, id of product
+          - name: revenue
+            description: earning from orders
+          - name: quantity
+            description: products ordered
+        tests:
+          - unique:
+              column_name: "(orders_id || '-' || pdt_id)"
+      - name: ship
+        identifier: raw_gz_ship
+        description: greenweez shipping table
+        columns:
+          - name: orders_id
+            tests:
+              - unique
+              - not_null
+            description: orders_id for shipping
+          - name: shipping_fee
+            description: price for shipping
+          - name: shipping_fee_1
+            description: same as shipping_fee, deleted
+          - name: logCost
+            description: logistics cost
+          - name: ship_cost
+
+models:
+  - name: stg_raw_product
+  - name: stg_raw_sales
+  - name: stg_raw_ship
+  - name: int_sales_margin
+    description: margin calcultation per order line / product sale
+    columns:
+      - name: margin
+        description: Margin = Revenue - Purchase_cost
+      - name: Purchase_cost
+        description: Purchase_cost = Quantity * Purchase_price
+  - name: int_orders_margin
+    description: margin calcultation per order
+    columns:
+      - name: orders_id
+        description: primary key
+      - name: margin
+        description: Margin = Revenue - Purchase_cost
+      - name: Purchase_cost
+        description: Purchase_cost = Quantity * Purchase_price
+      - name: date_date
+        description: date of the order
+      - name: revenue
+        description: sum of revenue per order
+      - name: quantity
+        description: sum of quantity per order
+  - name: int_orders_operational
+    description: operational margin calcultation per order
+    columns:
+      - name: operational_margin
+        description: Operational margin = margin + shipping fee - log_cost - ship_cost
+  - name: finance_days
+    description: finance calculation per days
+
